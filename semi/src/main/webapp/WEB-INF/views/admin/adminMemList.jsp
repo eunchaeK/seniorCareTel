@@ -1,0 +1,300 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8" isELIgnored="false"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<%
+request.setCharacterEncoding("UTF-8");
+%>
+
+<c:set var="contextPath" value="${pageContext.request.contextPath}" /> 
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>회원 관리</title>
+  
+  <style type="text/css">
+  	.wrapper{height: 100vh;}
+  	
+  	/* 검색부분 */
+  	.searchArea{margin: 15px 0px;}
+  	.leftAlign{text-align: left;}
+  	
+  	/* 검색부분 (https://wazacs.tistory.com/34) */
+  	/* 검색타입 */
+ 	 /* IE */
+	 #searchType::-ms-expand { 
+		display: none;
+	 }
+	 #searchType {
+	  -o-appearance: none;
+	  -webkit-appearance: none;
+	  -moz-appearance: none;
+	  appearance: none;
+	  
+	  width: 110px;
+	  height: 30px;
+	  background: url('https://image.flaticon.com/icons/png/512/1174/1174405.png') calc(100% - 5px) center no-repeat;
+	  background-size: 18px;
+	  padding: 6px 30px 5px 10px;
+	  border-radius: 4px;
+	  outline: 0 none;
+	}
+	#searchType option {
+	  background: #ebebeb;
+	  padding: 3px 3px;
+	}
+  	 
+  	/* input 태그 */ 
+  	.searchText{
+  	  width: 140px;
+	  height: 28px;
+	  border: 1px solid #454545;
+  	  border-radius: 4px;
+  	  padding: 0px 10px;
+  	  outline: 0 none;
+  	}
+  	
+  	/* 버튼 클래스(검색, 회원삭제) */
+  	.btn{
+  	  margin:0;
+  	  padding:0;
+      border: 0;
+  	  border-radius: 4px;
+  	  height: 30px;
+  	}
+  	
+  	.delete {
+	float: right;
+	background-color: orange;
+	margin-top: 10px;
+	padding: 5px;
+}
+  	
+  	/* 검색 버튼 */
+  	#searchBtn{
+  	  width: 42px;
+  	  background-color: orange
+  	}
+  	
+  	/* 삭제 버튼 */
+  	#memDelBtn{
+  	  width: 65px;
+  	  background-color: black;
+  	  color: white;
+  	  margin: 15px 0px;
+  	}
+  	
+  	/* 테이블 css */
+	#memTable{
+  	  border: 1px solid black;
+  	  text-align: center;
+  	  width: 100%;
+  	}
+  	#memTable tr{text-align: center;}
+  	#tableHead{background-color: #c4c4c4}
+  	
+  </style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script type="text/javascript">
+	//검색리스트 요청 ajax
+	$(document).ready(function () {
+		//enter 이벤트 막기 
+		document.searchForm.addEventListener("keydown", e => {
+			let key = e.key || e.keyCode;
+			if (key === 'Enter' || key === 13) {
+			    e.preventDefault();
+			}
+		});
+		
+		
+		//검색필터 검색 버튼 클릭 시 
+		$("#searchBtn").click(function searchList() {
+			const type = $("#searchType").val();
+			const keyword = $('#searchKey').val().trim();
+			
+			//검색 내용 없을 시 alert(전체보기 검색 제외)
+			if(type != "" && keyword == ""){
+				alert('검색할 내용을 입력하세요!');
+				return false;
+			}
+			
+			$.ajax({
+				/* post로 나중에 바꾸기 */
+				type: "POST",
+				url: "/admin/getSearchMemList",
+				/* data: $("form[name=searchForm]").serialize(), */
+				data:{
+					"type" : type,
+					"keyword" : keyword
+				},
+				error : function(error) {
+				   alert("Error!");
+				},
+				success: function(result){
+					//테이블 초기화
+					$('#memTable > tbody ').empty();
+					$('.paging').empty();
+					if(result.length>=1){
+						result.forEach(function(item){
+							str = "<tr>";
+							str += "<td><input type='checkbox' class='delCheck' name='delete_numbers' onclick='selectBox()' value='" +item.number + "'/></td>"
+							str += "<td>" + item.number + "</td>";
+							str += "<td>" + item.id + "</td>";
+							str += "<td>" + item.member_name + "</td>";
+							str += "<td>" + item.birth + "</td>";
+							str += "<td>" + item.phone + "</td>";
+							str += "<td>" + item.patient_name + "</td>";
+							str += "<td>" + item.patient_birth + "</td>";
+							if(item.approval === true){
+								str += "<td>O</td>";
+								str += "<td><a href='${contextPath}/admin/membermod?number=" + item.number +"'>수정</a></td>";
+							}else{
+								str += " <td><a href='${contextPath}/admin/memberapproval?number=" + item.number + "'>X</a></td>";
+								str += "<td></td>";
+							}
+							str += "</tr>";
+							$('#memTable').append(str);
+						});
+					}else{
+						str = "<tr>";
+						str += "<td colspan='10'><div>해당 회원 데이터가 없습니다.</div></td>";
+						str += "</tr>";
+						$('#memTable').append(str);
+					}
+				}
+			});
+		});
+	});
+  </script>
+</head>
+<body>
+	<div id="head">
+		<h1>회원 관리</h1>
+	</div>
+	<div class="wrapper">
+		<form name="searchForm" autocomplete="on">
+		<div class="searchArea leftAlign">
+		   <select id="searchType" name="type">
+		     <option value="" selected="selected">전체보기</option>
+		     <option value="number">등록번호</option>
+		     <option value="id">아이디</option>
+		     <option value="member_name">회원이름</option>
+		     <option value="patient_name">환자이름</option>
+		     <option value="approval">승인여부</option>
+		   </select>
+		   <input type="search" name="keyword" class="searchText" id="searchKey" />
+		   <input type="button" id="searchBtn" class="btn"  value="검색"/>
+	   </div>
+	   </form>
+	   <form action="/admin/memdelete" method="post" name="membersList">
+	   <table id="memTable">
+	   <thead>
+	   	<tr id="tableHead"> 
+	   	  <td><input type="checkbox" name="selectAll" value="" onclick="checkAll(this)"/></td>
+	   	  <td><b>등록번호</b></td>	
+	   	  <td><b>아이디</b></td>	
+	   	  <td><b>회원이름</b></td>	
+	   	  <td><b>생년월일</b></td>	
+	   	  <td><b>핸드폰번호</b></td>	
+	   	  <td><b>환자이름</b></td>	
+	   	  <td><b>환자생년월일</b></td>	
+	   	  <td><b>승인여부</b></td>	
+	   	  <td><b>수정하기</b></td>	
+	   	</tr>
+	   	</thead>
+	   	<tbody>
+	   	 <c:forEach var="member" items="${membersList}">
+	   		  <tr>
+	   			<td><input type="checkbox" class="delCheck" name="delete_numbers" onclick="selectBox()" value="${member.number}"/></td>
+	   			<td>${member.number}</td>
+	   			<td>${member.id}</td>
+	   			<td>${member.member_name}</td>
+	   			<td>${member.birth}</td>
+	   			<td>${member.phone}</td>
+	   			<td>${member.patient_name}</td>
+	   			<td>${member.patient_birth}</td>
+	   			<c:choose>
+				    <c:when test="${member.approval eq true}">
+				        <td>O</td>
+				        <td><a href="${contextPath}/admin/membermod?number=${member.number}">수정</a></td>
+				    </c:when>
+				    <c:otherwise>
+				         <td><a href="${contextPath}/admin/memberapproval?number=${member.number}">X</a></td>
+				         <td>&nbsp</td>
+				    </c:otherwise>
+				</c:choose>
+	   		  </tr>	
+	      </c:forEach>
+	   	</tbody>
+	   </table>
+	   
+	   <div class="bottom">
+			<div class="leftAlign">
+				<div>전체 회원 수: ${memListCnt}
+		   	   		<input type="button" onclick="checkSelect()" class="btn delete" value="선택삭제">
+				</div>
+		   </div>
+		   <ul class="paging">
+			  	<c:if test="${paging.prev}">
+			  		<span><a href='<c:url value="/admin/memlist?page=${paging.startPage-1}"/>'>이전</a></span>
+			  	</c:if>
+			  	<c:forEach begin="${paging.startPage}" end="${paging.endPage}" var="num">
+			        <span><a href='<c:url value="/admin/memlist?page=${num}"/>'>${num}</a></span>
+			    </c:forEach>
+			    <c:if test="${paging.next && paging.endPage>0}">
+			        <span><a href='<c:url value="/admin/memlist?page=${paging.endPage+1}"/>'>다음</a></span>
+			    </c:if>
+		    </ul>
+	    </div>
+	   </form>
+	</div>   
+<script>
+	//삭제 버튼 
+	function checkAll(checkAll){
+	    let checkboxes = document.getElementsByName("delete_numbers");
+	
+	    checkboxes.forEach((checkbox)=>{
+	        checkbox.checked=checkAll.checked;
+	    });
+	}
+	
+	function selectBox(){
+		  // 전체 체크박스
+		  const checkboxes 
+		    = document.querySelectorAll('input[name="delete_numbers"]');
+		  // 선택된 체크박스
+		  const checked 
+		    = document.querySelectorAll('input[name="delete_numbers"]:checked');
+		  // select all 체크박스
+		  const selectAll 
+		    = document.querySelector('input[name="selectAll"]');
+		  
+		  if(checkboxes.length === checked.length)  {
+		    selectAll.checked = true;
+		  }else {
+		    selectAll.checked = false;
+		  }
+	}
+	
+	function checkSelect(){
+		const checked = document.querySelectorAll('input[name="delete_numbers"]:checked');
+		
+		if(checked.length === 0){
+			alert('삭제할 데이터를 선택해주세요.');
+			return false;
+		}else{
+			if(confirm(checked.length +"개의 데이터를 삭제하시겠습니까?")){
+				document.membersList.submit();
+			}else{
+				return;
+			}
+		}
+	}
+	
+</script>
+	
+</body>
+</html>

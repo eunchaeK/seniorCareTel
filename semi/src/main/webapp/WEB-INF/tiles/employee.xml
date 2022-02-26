@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+"-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+"http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+   <definition name="employeeLayout" template="/WEB-INF/views/common/employee/layout.jsp">
+      <put-attribute name="title" value="" />
+      <put-attribute name="header" value="/WEB-INF/views/common/employee/header.jsp" />
+      <put-attribute name="body" value="" />
+      <put-attribute name="footer" value="" />
+   </definition>
+
+   <definition name="employee/employeeMain" extends="employeeLayout">
+      <put-attribute name="title" value="요양 보호사 메인 페이지" />
+      <put-attribute name="body" value="/WEB-INF/views/employee/employeeMain.jsp" />
+   </definition>   
+   
+	<definition name="employee/searchPatients" extends="employeeLayout">
+      <put-attribute name="title" value="환자 정보 조회" />
+      <put-attribute name="body" value="/WEB-INF/views/employee/employeeSearchPatients.jsp" />
+   </definition>
+   
+   <definition name="employee/employeeInsertPatients" extends="employeeLayout">
+      <put-attribute name="title" value="환자 정보 입력" />
+      <put-attribute name="body" value="/WEB-INF/views/employee/employeeInsertPatients.jsp" />
+   </definition>
+   
+   <definition name="employee/employeeUpdatePatients" extends="employeeLayout">
+      <put-attribute name="title" value="환자 정보 입력" />
+      <put-attribute name="body" value="/WEB-INF/views/employee/employeeUpdatePatients.jsp" />
+   </definition>
+
+      <definition name="employee/searchReservations" extends="employeeLayout">
+      <put-attribute name="title" value="면회 조회" />
+      <put-attribute name="body" value="/WEB-INF/views/employee/employeeSearchReservations.jsp" />
+   </definition>
+   
+	<definition name="employee/employeeSearchRooms" extends="employeeLayout">
+      <put-attribute name="title" value="호실 관리" />
+      <put-attribute name="body" value="/WEB-INF/views/employee/employeeSearchRooms.jsp" />
+   </definition>   
+
+	<definition name="employeeSignup" extends="employeeLayout">
+		<put-attribute name="title" value="회원가입" />
+		<put-attribute name="body" value="/WEB-INF/views/employee/employeeSignup.jsp" />
+	</definition>
+
+</tiles-definitions>

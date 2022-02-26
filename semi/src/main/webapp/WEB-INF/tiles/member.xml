@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+"-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+"http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+	<definition name="memberLayout" template="/WEB-INF/views/common/member/layout.jsp">
+		<put-attribute name="title" value=""/>
+		<put-attribute name="header" value="/WEB-INF/views/common/header.jsp"/>
+		<put-attribute name="body" value=""/>
+		<put-attribute name="footer" value="/WEB-INF/views/common/footer.jsp"/>
+	</definition>
+
+   <definition name="memberMain" extends="memberLayout">
+		<put-attribute name="title" value="메인페이지"/>
+		<put-attribute name="body" value="/WEB-INF/views/member/memberMain.jsp"/>
+	</definition>
+	
+	<definition name="memberCovid" extends="memberLayout">
+		<put-attribute name="title" value="코로나19"/>
+		<put-attribute name="body" value="/WEB-INF/views/member/memberCovid.jsp"/>
+	</definition>
+	
+	<definition name="memberMenu" extends="memberLayout">
+		<put-attribute name="title" value="식단표"/>
+		<put-attribute name="body" value="/WEB-INF/views/member/memberMenu.jsp"/>
+	</definition>
+	
+	<definition name="memberGuideInfo" extends="memberLayout">
+		<put-attribute name="title" value="입소절차"/>
+		<put-attribute name="body" value="/WEB-INF/views/member/memberGuideInfo.jsp"/>
+	</definition>
+	
+	<definition name="memberGuideInfoCost" extends="memberLayout">
+		<put-attribute name="title" value="입소비용"/>
+		<put-attribute name="body" value="/WEB-INF/views/member/memberGuideInfoCost.jsp"/>
+	</definition>
+	
+	<definition name="memberMap" extends="memberLayout">
+		<put-attribute name="title" value="지도"/>
+		<put-attribute name="body" value="/WEB-INF/views/member/memberMap.jsp"/>
+	</definition>
+	
+
+   
+    <definition name="member/memberModifySelection" extends="memberLayout">
+      <put-attribute name="title" value="회원 정보 수정 ( 통합 창 )" />
+      <put-attribute name="body" value="/WEB-INF/views/member/memberModifySelection.jsp" />
+   </definition>
+   
+   <definition name="member/memberModify" extends="memberLayout">
+      <put-attribute name="title" value="회원 정보 수정" />
+      <put-attribute name="body" value="/WEB-INF/views/member/memberModify.jsp" />
+   </definition>
+   
+   <definition name="member/memberModifyPassword" extends="memberLayout">
+      <put-attribute name="title" value="비밀 번호 수정" />
+      <put-attribute name="body" value="/WEB-INF/views/member/memberModifyPassword.jsp" />
+   </definition>
+   
+   
+	<definition name="member/searchReservations" extends="memberLayout">
+		<put-attribute name="title" value="예약 조회"/>
+		<put-attribute name="body" value="/WEB-INF/views/member/memberReservationList.jsp"/>
+	</definition>
+   
+   <definition name="member/memberModReservation" extends="memberLayout">
+      <put-attribute name="title" value="면회 예약 수정" />
+      <put-attribute name="body" value="/WEB-INF/views/member/memberModReservation.jsp" />
+   </definition>
+   
+    <definition name="member/memberCreateReservation" extends="memberLayout">
+      <put-attribute name="title" value="면회 예약 신청" />
+      <put-attribute name="body" value="/WEB-INF/views/member/memberCreateReservation.jsp" />
+   </definition>
+   
+    <definition name="memberSignup" extends="memberLayout">
+		<put-attribute name="title" value="회원가입"/>
+		<put-attribute name="body" value="/WEB-INF/views/member/memberSignup.jsp"/>
+	</definition>
+	
+	<definition name="memberFacilities" extends="memberLayout">
+		<put-attribute name="title" value="회원가입"/>
+		<put-attribute name="body" value="/WEB-INF/views/member/memberFacilities.jsp"/>
+	</definition>
+	
+	<definition name="memberStaff" extends="memberLayout">
+		<put-attribute name="title" value="회원가입"/>
+		<put-attribute name="body" value="/WEB-INF/views/member/memberStaff.jsp"/>
+	</definition>
+   
+</tiles-definitions>

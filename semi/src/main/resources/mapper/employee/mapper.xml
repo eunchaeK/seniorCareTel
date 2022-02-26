@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.semi.employee.dao.EmployeeDAO">
+	<resultMap id="patientsResult" type="employeeDTO">
+		<result property="patient_number" column="patient_number" />
+		<result property="patient_name" column="patient_name" />
+		<result property="patient_birth" column="patient_birth" />
+		<result property="patient_address" column="patient_address" />
+		<result property="patient_phone" column="patient_phone" />
+		<result property="hospitalization_date"	column="hospitalization_date" />
+		<result property="discharge_date" column="discharge_date" />
+		<result property="room_number" column="room_number" />
+		<result property="application" column="application" />
+		<result property="classification" column="classification" />
+	</resultMap>
+	
+	<!-- employee -->
+	<select id="selectAllPatientsList" resultMap="patientsResult">
+		<![CDATA[ 
+			SELECT patient_number, patient_name, patient_birth, patient_address, patient_phone, hospitalization_date, discharge_date, application
+			FROM patient 
+		]]>
+	</select>
+	
+	<!--  환자 관리 검색 필터 기능 -->
+	<select id="selectPatientList" parameterType="employeeDTO" resultType="employeeDTO">
+		SELECT patient_number, patient_name, patient_birth, patient_address, patient_phone, hospitalization_date, application
+		FROM patient 
+		<choose>
+			<when test="type != null and type.equals('patient_number')"> WHERE patient_number = #{keyword} </when>
+			<when test="type != null and type.equals('patient_name')"> WHERE patient_name LIKE CONCAT('%', #{keyword}, '%') </when>
+			<when test="type != null and type.equals('patient_birth')"> WHERE patient_birth LIKE CONCAT('%', #{keyword}, '%')</when>
+			<when test="type != null and type.equals('patient_address')"> WHERE patient_address LIKE CONCAT('%', #{keyword}, '%')</when>
+			<when test="type != null and type.equals('patient_phone')"> WHERE patient_phone LIKE CONCAT('%', #{keyword}, '%')</when>
+			<when test="type != null and type.equals('hospitalization_date')"> WHERE hospitalization_date LIKE CONCAT('%', #{keyword}, '%')</when>
+			<when test="type != null and type.equals('application')"> WHERE application = #{keyword}</when>
+		</choose>
+		ORDER BY patient_number
+	</select>
+	
+	<insert id="insertPatient" parameterType="employeeDTO">
+		INSERT INTO patient(patient_name, patient_birth, patient_address, patient_phone, hospitalization_date, application) 
+		VALUES (#{patient_name}, #{patient_birth}, #{patient_address}, #{patient_phone}, #{hospitalization_date}, #{application})
+	</insert>
+	
+	<update id="updatePatient" parameterType="employeeDTO">
+		UPDATE patient
+		SET patient_name = #{patient_name}, patient_birth = #{patient_birth}, patient_address = #{patient_address}, 
+			patient_phone = #{patient_phone}, hospitalization_date = #{hospitalization_date}, discharge_date = #{discharge_date}, application = #{application}
+		WHERE patient_number = #{patient_number}
+	</update>
+	
+	<select id="readPatientsInfo" parameterType="int" resultType="employeeDTO">
+		<![CDATA[ 
+			SELECT patient_number, patient_name, patient_birth, patient_address, patient_phone, hospitalization_date, discharge_date, application
+			FROM patient 
+			WHERE patient_number = #{patient_number} 
+		]]>
+	</select>
+	
+	<delete id="deletePatient" parameterType="int">
+		<![CDATA[ 
+			DELETE FROM patient
+			WHERE patient_number=#{patient_number} 
+		]]>
+	</delete>
+
+	<select id="patientsListCnt" resultType="int">
+		SELECT COUNT(*) as patientsListCnt
+		FROM patient
+	</select>
+	
+	<!-- 면회 예약 조회 -->
+	<resultMap id="ReservationsResult" type="employeeDTO">
+		<result property="visit_number" column="visit_number" />
+		<result property="visit_meeting" column="visit_meeting" />
+		<result property="visit_date" column="visit_date" />
+		<result property="visit_time" column="visit_time" />
+		<result property="family_number" column="family_number" />
+		<result property="number" column="number" />
+		<result property="member_name" column="member_name" />
+		<result property="patient_number" column="patient_number" />
+		<result property="patient_name" column="patient_name" />
+	</resultMap>
+	
+	<select id="selectAllReservationsList" resultMap="ReservationsResult">
+		<![CDATA[ 
+			SELECT visit_number, visit_meeting, visit_date, visit_time, member_name, patient_number, patient_name 
+			FROM reservation 
+		]]>
+	</select>
+	
+	<!--   면회 검색 필터  -->
+	<select id="selectSearchList" parameterType="employeeDTO" resultType="employeeDTO">
+		SELECT visit_number,visit_meeting,visit_date,visit_time,member_name,patient_number,patient_name FROM reservation
+			<choose>
+				<when test="type ==null "> </when>
+				<when test="type !=null and type.equals('visit_number')"> WHERE visit_number = #{keyword} </when>
+				<when test="type !=null and type.equals('visit_meeting')"> WHERE visit_meeting LIKE CONCAT('%', #{keyword}, '%') </when>
+				<when test="type !=null and type.equals('member_name')"> WHERE member_name LIKE CONCAT('%', #{keyword}, '%') </when>
+				<when test="type !=null and type.equals('patient_number')"> WHERE patient_number = #{keyword} </when>
+				<when test="type !=null and type.equals('patient_name')"> WHERE patient_name LIKE CONCAT('%', #{keyword}, '%') </when>
+			</choose>
+		ORDER BY visit_number
+	</select>
+	
+	<select id="reservListCnt" resultType="int">
+		SELECT COUNT(*) as reservListCnt
+		FROM reservation 
+	</select>
+	
+	
+</mapper>

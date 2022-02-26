@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.semi.member.dao.MemberDAO">
+
+	<resultMap id="MemberInfoResult" type="memberDTO">
+		<result property="visit_number" column="visit_number" />
+		<result property="visit_meeting" column="visit_meeting" />
+		<result property="visit_date" column="visit_date" />
+		<result property="visit_time" column="visit_time" />
+		<result property="family_number" column="family_number" />
+		<result property="number" column="number" />
+		<result property="member_name" column="member_name" />
+		<result property="patient_number" column="patient_number" />
+		<result property="patient_name" column="patient_name" />
+	</resultMap>
+
+
+	<!-- 로그인 기능 -->
+	<select id="memberLogin" resultType="com.project.semi.member.dto.MemberDTO">
+		SELECT * 
+		FROM register 
+		WHERE id = #{id} AND password = #{password}
+	</select>
+
+
+	<!-- 회원 정보 수정 기능 : 회원 정보 가져오기 -->
+	<select id="passwordCheck" parameterType="memberDTO" resultType="memberDTO">
+		SELECT number , id, password, member_name , patient_name ,classification
+		FROM register
+		WHERE id = #{id}
+		AND password = #{password}
+	</select>
+
+	<!-- 회원 정보 수정 기능 : 회원 정보 불러오기 -->
+	<select id="selectMemberInfo" parameterType="memberDTO"
+		resultMap="MemberInfoResult">
+		<![CDATA[
+			SELECT number, id , password,  member_name ,birth ,address, phone,classification, patient_name,patient_birth
+			FROM register 
+			WHERE member_name = #{member_name}
+		]]>
+	</select>
+
+	<!-- 회원 정보 수정 기능 : 개인 정보 ( 비밀번호 제외 ) -->
+
+	<update id="updateInfo" parameterType="memberDTO">
+     <![CDATA[
+	     UPDATE register
+	     SET 
+	     	member_name = #{member_name},
+	     	phone = #{phone},
+	     	address = #{address}
+	   		WHERE 
+	     	id = #{id}
+	     	AND password = #{password}
+	     	
+      ]]>
+	</update>
+
+	<!-- 회원 정보 수정 기능 : 개인 정보 ( 비밀번호 ) -->
+	<update id="updatePassword" parameterType="memberDTO">
+     <![CDATA[
+	     UPDATE register
+	     SET 
+	     	password = #{newPassword}
+	   		WHERE 
+	     	id = #{id}
+	     	AND password = #{password}
+	     	
+      ]]>
+	</update>
+
+	<resultMap id="ReservationsResult" type="memberDTO">
+		<result property="visit_number" column="visit_number" />
+		<result property="visit_meeting" column="visit_meeting" />
+		<result property="visit_date" column="visit_date" />
+		<result property="visit_time" column="visit_time" />
+		<result property="family_number" column="family_number" />
+		<result property="number" column="number" />
+		<result property="member_name" column="member_name" />
+		<result property="patient_number" column="patient_number" />
+		<result property="patient_name" column="patient_name" />
+	</resultMap>
+
+	<!-- 보호자 로그인 후 , 면회 예약 조회 -->
+	<select id="selectAllReservationsList" parameterType="memberDTO" resultMap="ReservationsResult">
+      <![CDATA[
+        
+			SELECT visit_number, visit_meeting, visit_date, visit_time, member_name, patient_number, patient_name 
+			FROM reservation
+			WHERE member_name = #{member_name}
+      ]]>
+	</select>
+
+	<!-- 면회 검색 필터 -->
+	<select id="selectSearchList" parameterType="memberDTO"	resultType="memberDTO">
+		SELECT visit_number, visit_meeting, visit_date, visit_time, member_name, patient_number, patient_name
+		FROM reservation
+
+		<choose>
+			<when test="type ==null "></when>
+			<when test="type !=null and type.equals('visit_number')"> WHERE visit_number = #{keyword} </when>
+			<when test="type !=null and type.equals('visit_meeting')"> WHERE visit_meeting = #{keyword}	</when>
+			<when test="type !=null and type.equals('member_name')"> WHERE member_name = #{keyword} </when>
+			<when test="type !=null and type.equals('patient_number')"> WHERE patient_number = #{keyword}</when>
+			<when test="type !=null and type.equals('patient_name')"> WHERE patient_name = #{keyword} </when>
+		</choose> ORDER BY visit_number
+	</select>
+
+	<!-- 면회 예약 읽어오기 -->
+	<select id="readReservationInfo" resultType="memberDTO"
+		parameterType="Integer">
+		<![CDATA[
+			SELECT reservation.visit_number, reservation.visit_meeting, reservation.visit_date, reservation.visit_time, register.member_name, patient.patient_name 
+			FROM reservation 
+				INNER JOIN family ON family.family_number = reservation.family_number 
+				INNER JOIN register ON register.number = family.number 
+				INNER JOIN patient ON family.patient_number = patient.patient_number
+			WHERE reservation.visit_number = #{visit_number}
+		]]>
+	</select>
+	
+	<!-- 면회 예약 신청 기능 -->
+	<insert id="insertReservation" parameterType="memberDTO">
+		<![CDATA[
+			INSERT INTO reservation(visit_meeting, visit_date, visit_time, family_number, number, member_name, patient_number, patient_name)
+			SELECT #{visit_meeting}, #{visit_date}, #{visit_time}, family.family_number, register.number, register.member_name, patient.patient_number, patient.patient_name
+			FROM family 
+				INNER JOIN register ON register.number = family.number
+				INNER JOIN patient ON family.patient_number = patient.patient_number
+			WHERE register.member_name = #{member_name} AND patient.patient_name = #{patient_name}
+		]]>
+	</insert>
+
+	<!-- 면회 수정 기능 -->
+	<update id="updateReservation" parameterType="memberDTO">
+     <![CDATA[
+	     UPDATE reservation
+	     SET 
+	     	visit_meeting = #{visit_meeting}, 
+	     	visit_date = #{visit_date}, 
+	     	visit_time = #{visit_time}
+	     WHERE 
+	     	visit_number = #{visit_number}
+      ]]>
+	</update>
+
+	<!-- 면회 삭제 기능 : DAO에서 int visit_number 를 인자로 받음. -->
+	<delete id="deleteReservation" parameterType="Integer">
+		<![CDATA[
+		   delete from reservation
+		   where visit_number=#{visit_number}
+		]]>
+	</delete>
+
+	
+
+	<select id="reservListCnt" resultType="int">
+		SELECT COUNT(*) 
+		FROM 
+			(SELECT reservation.visit_number, reservation.visit_meeting, reservation.visit_date, reservation.visit_time, register.member_name, patient.patient_name 
+			FROM reservation 
+				INNER JOIN family ON family.family_number = reservation.family_number 
+				INNER JOIN register ON register.number = family.number 
+				INNER JOIN patient ON family.patient_number = patient.patient_number) A
+	</select>
+</mapper>

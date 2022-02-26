@@ -1,0 +1,75 @@
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.sel {
+  position: absolute;
+  right: 20%;
+  width: 200px;
+  height: 46px;
+  padding: 12px;
+  border: 1px solid #bdbdbd;
+  font-size: 15px;
+  font-family: inherit;
+  border-radius: 3px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.classification_title {
+  font-size: 48px;
+  margin-bottom: 50px;
+}
+
+.join_content {
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+label {
+  font-size: 18px;
+}
+
+.join_input {
+  width: 251px;
+  height: 43px;
+  border-radius: 10px;
+  border: 1px solid #c4c4c4;
+  font-size: 18px;
+  padding: 10px 15px;
+}
+
+.join_row {
+  display: flex;
+  width: 480px;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+input[type='date'] {
+  width: 251px;
+  height: 43px;
+  border-radius: 10px;
+  border: 1px solid #c4c4c4;
+  font-size: 18px;
+  padding: 10px 15px;
+}
+
+#btnJoin {
+  margin-top: 20px;
+  background-color: #c4c4c4;
+  color: #fff;
+  font-size: 18px;
+  border: none;
+  border-radius: 10px;
+  width: 384px;
+  height: 57px;
+}
+
+/* 아이디 중복 체크 */
+.id_ok{color: blue; display: none;}
+.id_already{color: red; display: none;}

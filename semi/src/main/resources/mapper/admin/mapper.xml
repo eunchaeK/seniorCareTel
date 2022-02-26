@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.semi.admin.dao.AdminDAO">
+
+	<!-- Member -->
+	<resultMap  id="memResult" type="adminDTO">
+	  <result property="number" column="number" />
+      <result property="member_name" column="member_name" />
+      <result property="birth" column="birth" />
+      <result property="phone" column="phone" />
+      <result property="patient_number" column="patient_number" />
+      <result property="patient_name" column="patient_name" />
+      <result property="approval" column="approval" />
+	</resultMap>
+	
+	<!-- 회원 -->
+	<select id="memListCnt" resultType="int">
+		SELECT COUNT(*) FROM register
+		WHERE classification = '보호자'
+	</select>
+	<select id="selectAllMemberList" resultMap="memResult"   >
+      <![CDATA[
+        SELECT number, id, member_name, birth, phone, patient_name, patient_birth, approval
+		FROM register 
+		WHERE classification = '보호자'
+		ORDER BY number LIMIT #{pageStart}, #{perPageNum}
+      ]]>
+   </select>
+	
+	<select id="selectSearchMemList" parameterType="adminDTO" resultType="adminDTO">
+		SELECT number, id, member_name, birth, phone, patient_name, patient_birth, approval 
+		FROM register 
+		WHERE classification = '보호자'
+		<choose>
+			<when test="type != null and type.equals('number')"> AND number = #{keyword} </when>
+			<when test="type != null and type.equals('id')"> AND id LIKE CONCAT('%', #{keyword}, '%') </when>
+			<when test="type != null and type.equals('member_name')"> AND member_name LIKE CONCAT('%', #{keyword}, '%')</when>
+			<when test="type != null and type.equals('patient_name')"> AND patient_name LIKE CONCAT('%', #{keyword}, '%')</when>
+			<when test="type != null and type.equals('approval')"> AND approval = #{keyword} </when>
+		</choose>
+		ORDER BY number
+	</select>
+	
+	<select id="beforeMemApproval" resultType="adminDTO" parameterType="Integer">
+		<![CDATA[ 
+			SELECT number, member_name, birth, address, phone, patient_name, patient_birth, approval 
+			FROM register 
+			WHERE number = #{number} 
+		]]>
+	</select>
+	
+	<update id="approvalUpdate" parameterType="adminDTO">
+		<![CDATA[ 
+			UPDATE register 
+			SET member_name = #{member_name}, birth=#{birth}, address=#{address}, phone=#{phone}, patient_name=#{patient_name}, 
+				patient_birth=#{patient_birth}, approval = #{approval} 
+			WHERE number = #{number} 
+		]]>
+	</update>
+	
+	<insert id="familyInsert" parameterType="adminDTO">
+		<![CDATA[ 
+			INSERT INTO family(number, member_name, patient_number, patient_name, patient_birth) 
+			VALUES(#{number},#{member_name}, #{patient_number}, #{patient_name}, #{patient_birth}) 
+		]]>
+	</insert>
+	
+	<select id="readMemberInfo" resultType="adminDTO" parameterType="Integer">
+		<![CDATA[ 
+			SELECT rg.number, rg.member_name, rg.birth, rg.address, rg.phone, fm.patient_number, fm.patient_name, fm.patient_birth 
+			FROM register rg 
+				INNER JOIN family fm ON rg.number = fm.number 
+			WHERE rg.number = #{number} 
+		]]>
+	</select>
+	
+	<update id="updateMember" parameterType="adminDTO">
+		<![CDATA[ 
+			UPDATE register rg 
+				INNER JOIN family fm ON rg.number = fm.number 
+			SET rg.member_name = #{member_name}, rg.birth=#{birth}, rg.address=#{address}, rg.phone=#{phone} 
+			WHERE rg.number = #{number} 
+		]]>
+	</update>
+	
+	<delete id="deleteRegister" parameterType="int">
+		<![CDATA[ 
+			DELETE FROM register 
+			WHERE number=#{number} 
+		]]>
+	</delete>
+	
+	
+	<!-- Employee -->
+	<!-- 직원(요양사) -->
+	<select id="empListCnt" resultType="int">
+		<![CDATA[ 
+			SELECT COUNT(*) 
+			FROM register 
+			WHERE classification = '직원' 
+		]]>
+	</select>
+	
+	<select id="selectAllEmpList" resultType="adminDTO">
+		<![CDATA[ 
+			SELECT number, id, member_name, birth, phone, approval 
+			FROM register 
+			WHERE classification = '직원' 
+			ORDER BY number LIMIT #{pageStart}, #{perPageNum} 
+		]]>
+	</select>
+	
+	<select id="selectSearchEmpList" parameterType="adminDTO" resultType="adminDTO">
+ 		SELECT number, id, member_name, birth, phone, approval
+		FROM register 
+		WHERE classification = '직원'
+		<choose>
+		<when test="type != null and type.equals('number')">
+			AND number = #{keyword} 
+		</when>
+		<when test="type != null and type.equals('member_name')">
+			AND member_name LIKE CONCAT('%', #{keyword}, '%')
+		</when>
+		<when test="type != null and type.equals('approval')">
+			AND approval = #{keyword}
+		</when>		
+		</choose>
+		ORDER BY number
+ 	</select>
+	
+	<select id="beforeEmpApproval" resultType="adminDTO" parameterType="Integer">
+		<![CDATA[ 
+			SELECT number, member_name, birth, address, phone, approval 
+			FROM register 
+			WHERE number = #{number} 
+		]]>
+	</select>
+	
+	<insert id="caregiverInsert" parameterType="adminDTO">
+		<![CDATA[ 
+			INSERT INTO caregiver(start_date, number, member_name) 
+			VALUES(#{start_date}, #{number}, #{member_name}) 
+		]]>
+	</insert>
+	
+	<select id="readEmpInfo" parameterType="int" resultType="adminDTO">
+		<![CDATA[ 
+			SELECT rg.number, rg.member_name, rg.birth, rg.address, rg.phone, cg.start_date, cg.resignation_date
+			FROM register rg 
+				INNER JOIN caregiver cg ON rg.number = cg.number 
+			WHERE rg.number = #{number} 
+		]]>
+	</select>
+	
+	<update id="updateEmp" parameterType="adminDTO">
+		<![CDATA[ 
+			UPDATE register rg 
+				INNER JOIN caregiver cg ON rg.number = cg.number 
+			SET rg.member_name = #{member_name}, rg.birth=#{birth}, rg.address=#{address}, rg.phone=#{phone}, 
+				cg.start_date=#{start_date}, cg.resignation_date=#{resignation_date} 
+			WHERE rg.number = #{number} 
+		]]>
+	</update>
+	
+	<!-- 로그인 -->
+	<select id="loginCheck" parameterType="adminDTO" resultType="adminDTO"> 
+		SELECT admin_id, admin_password 
+		FROM admin 
+		WHERE admin_id = #{admin_id} AND admin_password = #{admin_password}
+	</select>
+
+	<!-- Reservation -->
+	<resultMap id="reservResult" type="adminDTO">
+		<result property="visit_number" column="visit_number" />
+		<result property="visit_meeting" column="visit_meeting" />
+		<result property="visit_date" column="visit_date" />
+		<result property="visit_time" column="visit_time" />
+		<result property="family_number" column="patient_number" />
+		<result property="number" column="number" />
+		<result property="member_name" column="member_name" />
+		<result property="patient_number" column="patient_number" />
+		<result property="patient_name" column="patient_name" />
+	</resultMap>
+
+	<select id="selectAllReservationList" resultMap="reservResult">
+ 		<![CDATA[
+			SELECT reservation.visit_number, reservation.visit_meeting, reservation.visit_date, reservation.visit_time, register.member_name, patient.patient_name 
+			FROM reservation 
+				INNER JOIN family ON family.family_number = reservation.family_number 
+				INNER JOIN register ON register.number = family.number 
+				INNER JOIN patient ON family.patient_number = patient.patient_number
+			ORDER BY reservation.visit_number
+		]]>
+	</select>
+
+	<select id="readReservationInfo" resultType="adminDTO" parameterType="Integer">
+		<![CDATA[
+			SELECT reservation.visit_number, reservation.visit_meeting, reservation.visit_date, reservation.visit_time, 
+					register.member_name, patient.patient_name 
+			FROM reservation 
+				INNER JOIN family ON family.family_number = reservation.family_number 
+				INNER JOIN register ON register.number = family.number 
+				INNER JOIN patient ON family.patient_number = patient.patient_number
+			WHERE reservation.visit_number = #{visit_number}
+		]]>
+	</select>
+
+	<update id="updateReservation" parameterType="adminDTO">
+     <![CDATA[
+	     UPDATE reservation
+	     SET 
+	     	visit_meeting = #{visit_meeting}, 
+	     	visit_date = #{visit_date}, 
+	     	visit_time = #{visit_time}
+	     WHERE 
+	     	visit_number = #{visit_number}
+      ]]>
+	</update>
+
+	<delete id="deleteReservation" parameterType="int">
+	<![CDATA[
+	   delete from reservation
+	   where visit_number=#{visit_number}
+	]]>
+	</delete>
+	
+	<select id="selectSearchReservationList" parameterType="adminDTO" resultType="adminDTO">
+		SELECT reservation.visit_number, reservation.visit_meeting, reservation.visit_date, reservation.visit_time, 
+				register.member_name, patient.patient_name
+		FROM reservation
+			INNER JOIN family 
+				ON family.family_number = reservation.family_number
+			INNER JOIN register 
+				ON register.number = family.number
+			INNER JOIN patient 
+				ON family.patient_number = patient.patient_number
+		<choose>
+			<when test="type != null and type.equals('visit_meeting')">
+				AND reservation.visit_meeting LIKE CONCAT('%', #{keyword}, '%')
+			</when>
+			<when test="type != null and type.equals('visit_date')">
+				AND reservation.visit_date LIKE CONCAT('%', #{keyword}, '%')
+			</when>
+			<when test="type != null and type.equals('member_name')">
+				AND register.member_name LIKE CONCAT('%', #{keyword}, '%')
+			</when>
+			<when test="type != null and type.equals('patient_name')">
+				AND patient.patient_name LIKE CONCAT('%', #{keyword}, '%')
+			</when>
+		</choose>
+		ORDER BY reservation.visit_number
+	</select>
+
+	<select id="reservListCnt" resultType="int">
+		SELECT COUNT(*)
+		FROM (SELECT reservation.visit_number, reservation.visit_meeting, reservation.visit_date, 
+						reservation.visit_time, register.member_name, patient.patient_name
+				FROM reservation
+					INNER JOIN family 
+						ON family.family_number = reservation.family_number
+					INNER JOIN register 
+						ON register.number = family.number
+					INNER JOIN patient 
+						ON family.patient_number = patient.patient_number) A
+	</select>
+</mapper>

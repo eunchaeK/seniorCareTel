@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+"-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+"http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+	<definition name="adminLayout" template="/WEB-INF/views/common/admin/layout.jsp">
+		<put-attribute name="title" value="" />
+		<put-attribute name="header" value="/WEB-INF/views/common/admin/header.jsp" />
+		<put-attribute name="body" value="" />
+		<put-attribute name="footer" value="" />
+	</definition>
+
+	<definition name="admin/adminMain" extends="adminLayout">
+		<put-attribute name="title" value="메인 페이지" />
+		<put-attribute name="body" value="/WEB-INF/views/admin/adminMain.jsp" />
+	</definition>
+	
+
+	
+	<!-- 회원(가족) -->
+	<definition name="admin/memlist" extends="adminLayout">
+		<put-attribute name="title" value="회원리스트" />
+		<put-attribute name="body" value="/WEB-INF/views/admin/adminMemList.jsp" />
+	</definition>
+	
+	<definition name="admin/membermod" extends="adminLayout">
+		<put-attribute name="title" value="회원정보수정" />
+		<put-attribute name="body" value="/WEB-INF/views/admin/adminMemModForm.jsp" />
+	</definition>
+	
+	<definition name="admin/memapproval" extends="adminLayout">
+		<put-attribute name="title" value="회원 승인" />
+		<put-attribute name="body" value="/WEB-INF/views/admin/adminMemApproval.jsp" />
+	</definition>
+	
+	<!-- 직원(요양사) -->
+	<definition name="admin/emplist" extends="adminLayout">
+		<put-attribute name="title" value="요양사리스트" />
+		<put-attribute name="body" value="/WEB-INF/views/admin/adminEmpList.jsp" />
+	</definition>
+	
+	<definition name="admin/empapproval" extends="adminLayout">
+		<put-attribute name="title" value="메인페이지" />
+		<put-attribute name="body" value="/WEB-INF/views/admin/adminEmpApproval.jsp" />
+	</definition>
+	
+	<definition name="admin/empmod" extends="adminLayout">
+		<put-attribute name="title" value="메인페이지" />
+		<put-attribute name="body" value="/WEB-INF/views/admin/adminEmpModForm.jsp" />
+	</definition>
+	
+	<!-- 예약 -->
+	<definition name="admin/reservList" extends="adminLayout">
+		<put-attribute name="title" value="메인페이지" />
+		<put-attribute name="body" value="/WEB-INF/views/admin/adminReservation.jsp" />
+	</definition>
+	
+	<definition name="admin/adminModReservation" extends="adminLayout">
+		<put-attribute name="title" value="메인페이지" />
+		<put-attribute name="body" value="/WEB-INF/views/admin/adminModReservation.jsp" />
+	</definition>
+
+</tiles-definitions>

@@ -1,0 +1,101 @@
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+tr,
+td {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+td > a > img {
+  width: 200px;
+  height: 200px;
+  border-radius: 10px 10px 0px 0px;
+}
+
+a {
+  text-decoration: none;
+  color: white;
+}
+
+a:hover {
+  text-decoration: none;
+  color: white;
+}
+
+table {
+  margin: auto;
+}
+
+#empty {
+  width: 100px;
+}
+
+#radius {
+  height: 40px;
+  color: white;
+  background-color: gray;
+  border-radius: 0px 0px 10px 10px;
+  text-align: center;
+}
+
+.slide_wrapper {
+  position: relative;
+  width: 1000px;
+  height: 400px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.slides {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transition: left 0.8s ease-in-out;
+}
+
+.slides li:not(:last-child) {
+  float: left;
+  margin-right: 70px;
+}
+
+li > img {
+  width: 1000px;
+  height: 400px;
+  border-radius: 10px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 auto;
+}
+
+.controls {
+  margin-top: 10px;
+}
+
+.controls button {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  margin: 10px;
+}

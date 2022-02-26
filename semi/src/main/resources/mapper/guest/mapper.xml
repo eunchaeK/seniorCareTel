@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.semi.guest.dao.GuestDAO">
+	<insert id="memberJoin">
+		 INSERT INTO register (id, password, member_name, birth, address, phone, classification, patient_name, patient_birth)
+		 VALUES(#{id}, #{password}, #{member_name}, #{birth}, #{address}, #{phone}, "보호자", #{patient_name}, #{patient_birth})  
+	</insert>
+	<insert id="employeeJoin">
+		 INSERT INTO register (id, password, member_name, birth, address, phone, classification)
+		 VALUES(#{id}, #{password}, #{member_name}, #{birth}, #{address}, #{phone}, "직원")  
+	</insert>
+	<select id="idCheck" parameterType="String" resultType="Integer">
+		SELECT COUNT(id) FROM register WHERE id=#{id}
+	</select>
+</mapper>
+   
+<!--
+ <mapper namespace="com.project.semi.guest.mapper.MemberMapper">
+		<resultMap type="memResult" id="memberDTO">
+		<result property="id" column="id"/>
+		<result property="password" column="password"/>
+		<result property="name" column="name"/>
+		<result property="birth" column="birth"/>
+		<result property="address" column="address"/>
+		<result property="phone" column="phone"/>
+		<result property="classification" column="classification"/>
+		<result property="patient_name" column="patient_name"/>
+		<result property="patient_birth" column="patient_birth"/>
+	</resultMap>
+	
+	<insert id="insertMember">
+		 INSERT INTO register(id, password, name, birth, address, phone, classification, patient_name, patient_birth)
+		 values(#{id}, #{password}, #{name}, #{birth}, #{address}, #{phone}, #{classification}, #{patient_name}, #{patient_birth})  
+	</insert> 
+</mapper> -->
