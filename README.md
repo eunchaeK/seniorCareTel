@@ -1,1 +1,1 @@
-# seniorCareTel
+# 시니어케어텔 프로젝트
