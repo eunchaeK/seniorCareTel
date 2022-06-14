@@ -43,7 +43,7 @@ public class AdminController {
 	// 관리자 메인 페이지 (관리자 로그인 페이지 따로 구현)
 	@GetMapping("admin/adminMain")
 	public String adminMain(HttpSession session, HttpServletResponse resp) {
-		String classification = (String)session.getAttribute("classification");
+		String classification = (String)session.getAttribute("classification");	//session에서 사용자 등급 체크 
 		System.out.println("classification="+classification);
 		try {
 			resp.setContentType("text/html; charset=UTF-8");
@@ -58,7 +58,7 @@ public class AdminController {
 			e.printStackTrace();
 			return "/home";
 		}
-		return "admin/adminMain";
+		return "admin/adminMain";	
 	}
 
 	// 회원(가족)/////////////////////////////////////////////////////////////////////////
