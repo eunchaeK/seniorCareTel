@@ -1,5 +1,6 @@
 package com.project.semi.admin.controller;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.List;
@@ -37,9 +38,26 @@ public class AdminController {
 	@Autowired
 	private AdminDTO adminDTO;
 	
-	// 관리자 메인 페이지
+	private static String admin = "admin";	// 관리자 구분 
+	
+	// 관리자 메인 페이지 (관리자 로그인 페이지 따로 구현)
 	@GetMapping("admin/adminMain")
-	public String adminMain() {
+	public String adminMain(HttpSession session, HttpServletResponse resp) {
+		String classification = (String)session.getAttribute("classification");
+		System.out.println("classification="+classification);
+		try {
+			resp.setContentType("text/html; charset=UTF-8");
+			PrintWriter writer = resp.getWriter();
+			if(classification != admin) {
+				writer.println("<script>alert('관리자만 접근 가능합니다.');");
+				writer.println("history.back();</script>");
+				writer.flush();
+				writer.close();
+			}	
+		}catch(IOException e) {
+			e.printStackTrace();
+			return "/home";
+		}
 		return "admin/adminMain";
 	}
 
@@ -307,7 +325,7 @@ public class AdminController {
 		// 로그인 성공
 		if (dto != null) {
 			session.setAttribute("isLogOn", true);
-			session.setAttribute("classification", "admin");
+			session.setAttribute("classification", admin);
 		
 			System.out.println("로그인 성공! 아이디 : " + dto.getAdmin_id() + " 비밀번호 : " + dto.getAdmin_password());
 			return "redirect:/admin/adminMain";
