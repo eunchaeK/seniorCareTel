@@ -40,20 +40,37 @@ public class AdminController {
 	
 	private static String admin = "admin";	// 관리자 구분 
 	
-	// 관리자 메인 페이지 (관리자 로그인 페이지 따로 구현)
-	@GetMapping("admin/adminMain")
-	public String adminMain(HttpSession session, HttpServletResponse resp) {
-		String classification = (String)session.getAttribute("classification");	//session에서 사용자 등급 체크 
+	// 관리자 체크 
+	private boolean adminCheck(HttpSession session) {
+		String classification = (String)session.getAttribute("classification");		
 		System.out.println("classification="+classification);
+		if(classification != admin) 
+			return false;
+		else
+			return true;
+	}
+	
+	// 관리자 아닐 시 history back
+	private void historyBack(HttpServletResponse resp) throws IOException{
 		try {
 			resp.setContentType("text/html; charset=UTF-8");
 			PrintWriter writer = resp.getWriter();
-			if(classification != admin) {
-				writer.println("<script>alert('관리자만 접근 가능합니다.');");
-				writer.println("history.back();</script>");
-				writer.flush();
-				writer.close();
-			}	
+			writer.println("<script>alert('관리자만 접근 가능합니다.');");
+			writer.println("history.back();</script>");
+			writer.flush();
+			writer.close();
+		}catch(IOException e) {
+			throw e;
+		}
+	}
+	
+	// 관리자 메인 페이지 (관리자 로그인 페이지 따로 구현)
+	@GetMapping("admin/adminMain")
+	public String adminMain(HttpSession session, HttpServletResponse resp) {
+		try {
+			if(!adminCheck(session)) {
+				historyBack(resp);
+			}
 		}catch(IOException e) {
 			e.printStackTrace();
 			return "/home";
