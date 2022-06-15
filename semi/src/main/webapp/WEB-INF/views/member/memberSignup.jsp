@@ -31,7 +31,7 @@ request.setCharacterEncoding("UTF-8");
         <h1 class="classification_title">보호자 회원가입</h1>
         <!-- 아이디 -->
         <div class="join_row">
-          <h3 class="join_title"><label for="id">아이디</label></h3>
+          <h3 class="join_title"><label for="id">아이디 (5~20자)</label></h3>
           <input
             class="join_input"
             type="text"
@@ -39,11 +39,11 @@ request.setCharacterEncoding("UTF-8");
             name="id"
             title="id"
             maxlength="20"
+            placeholder="소문자&숫자&특수문자(_,-) 조합"
           />
         </div>
-        <span class="id_ok">사용 가능한 아이디입니다.</span>
-		<span class="id_already">이미 사용 중인 아이디입니다.</span>
-        <!-- 비밀번호 -->
+        <span class="id_check"></span>    
+		<!-- 비밀번호 -->
         <div class="join_row">
           <h3 class="join_title"><label for="password">비밀번호</label></h3>
           <input

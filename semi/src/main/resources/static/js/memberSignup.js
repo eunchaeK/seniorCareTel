@@ -113,11 +113,11 @@ $('#id').on("propertychange change keyup paste input", function(){
             data:{id:id},
             success:function(result){
 				if(result != 'fail'){
-					 $('.id_ok').css("display", "inline-block");
-            		 $('.id_already').css("display", "none");
+					 $('.id_check').html("사용 가능한 아이디입니다.");
+					 $('.id_check').css("color", "blue");
 				}else{
-					 $('.id_ok').css("display", "none");
-            		 $('.id_already').css("display", "inline-block");
+					 $('.id_check').html("사용 중인 아이디입니다.");
+					 $('.id_check').css("color", "red");
 				}
             },
             error:function(){
@@ -125,7 +125,6 @@ $('#id').on("propertychange change keyup paste input", function(){
             }
         });
 	}else{
-		 $('.id_ok').css("display", "none");
-		 $('.id_already').css("display", "none");
+		$('.id_check').css("display", "none");
 	}
 });
