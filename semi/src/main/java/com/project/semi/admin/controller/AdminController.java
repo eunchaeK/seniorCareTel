@@ -52,16 +52,12 @@ public class AdminController {
 	
 	// 관리자 아닐 시 history back
 	private void historyBack(HttpServletResponse resp) throws IOException{
-		try {
-			resp.setContentType("text/html; charset=UTF-8");
-			PrintWriter writer = resp.getWriter();
-			writer.println("<script>alert('관리자만 접근 가능합니다.');");
-			writer.println("history.back();</script>");
-			writer.flush();
-			writer.close();
-		}catch(IOException e) {
-			throw e;
-		}
+		resp.setContentType("text/html; charset=UTF-8");
+		PrintWriter writer = resp.getWriter();
+		writer.println("<script>alert('관리자만 접근 가능합니다.');");
+		writer.println("history.back();</script>");
+		writer.flush();
+		writer.close();
 	}
 	
 	// 관리자 메인 페이지 (관리자 로그인 페이지 따로 구현)
@@ -82,7 +78,7 @@ public class AdminController {
 
 	/* 회원 리스트 */
 	@GetMapping("/admin/memlist")
-	public String memList(Criteria cri, Model model) throws Exception {
+	public String memList(HttpSession session, Criteria cri, Model model) throws Exception {
 		//전체 회원 수(Paging)
 		int memListCnt = adminService.memListCnt();
 		
