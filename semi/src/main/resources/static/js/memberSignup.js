@@ -106,25 +106,31 @@ function moveurl(url) {
 $('#id').on("propertychange change keyup paste input", function(){
 	var id = $('#id').val();
 	
-	if(id != '' || id.length != 0){
+	if( 5 <= id.length && id.length <= 20 && getId.test(id)){
 		$.ajax({
             url:'/idCheck', //Controller에서 인식할 주소
             type:'post', //POST 방식으로 전달
             data:{id:id},
             success:function(result){
 				if(result != 'fail'){
-					 $('.id_check').html("사용 가능한 아이디입니다.");
-					 $('.id_check').css("color", "blue");
+					 $('.id_check').text("사용 가능한 아이디입니다.");
+					 $('.id_check').css({"display":"inline-block","color":"blue"});
 				}else{
-					 $('.id_check').html("사용 중인 아이디입니다.");
-					 $('.id_check').css("color", "red");
+					 $('.id_check').text("사용 중인 아이디입니다.");
+					 $('.id_check').css({"display":"inline-block","color":"red"});
 				}
             },
             error:function(){
                 alert("에러입니다");
             }
         });
-	}else{
+	}else if(id == '' || id.length == 0){
 		$('.id_check').css("display", "none");
+	}else if(id.length < 5){
+		$('.id_check').text("아이디를 5자 이상 입력해주세요.");
+		$('.id_check').css({"display":"inline-block","color":"red"});
+	}else{
+		$('.id_check').text("소문자&숫자&특수문자(_,-)만 가능합니다.");
+		$('.id_check').css({"display":"inline-block","color":"red"});
 	}
 });

@@ -39,7 +39,7 @@ request.setCharacterEncoding("UTF-8");
             name="id"
             title="id"
             maxlength="20"
-            placeholder="소문자&숫자&특수문자(_,-) 조합"
+            placeholder="소문자&숫자&특수문자(_,-) 가능"
           />
         </div>
         <span class="id_check"></span>    
