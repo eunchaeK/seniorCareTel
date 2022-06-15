@@ -8,7 +8,7 @@ const address = $('#address');
 const patient_name = $('#patient_name');
 const patient_birth = $('#patient_birth');
 const btnJoin = $('#btnJoin');
-const getId = RegExp(/^[a-z0-9_]{5,20}$/);
+const getId = RegExp(/^[a-z0-9_-]{5,20}$/);
 // 최소 8 자, 최소 하나의 문자, 숫자
 const getPw = RegExp(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,16}$/);
 // 한글사용
