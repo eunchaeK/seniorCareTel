@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.ibatis.javassist.bytecode.ClassFile;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -44,10 +45,8 @@ public class AdminController {
 	private boolean adminCheck(HttpSession session) {
 		String classification = (String)session.getAttribute("classification");		
 		System.out.println("classification="+classification);
-		if(classification != admin) 
-			return false;
-		else
-			return true;
+		
+		return classification == admin ? true : false;
 	}
 	
 	// 관리자 아닐 시 history back
