@@ -16,6 +16,7 @@ request.setCharacterEncoding("UTF-8");
 <script src='/css/fontawesome/all.js'></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://kit.fontawesome.com/79fd19de4b.js" crossorigin="anonymous"></script>
 <style type="text/css">
 .headerTbl {
 	padding-left: 150px;
@@ -63,7 +64,7 @@ a:hover{font-weight:bolder;}
 	<table class="headerTbl">
 		<tr>
 			<td id="header_menu" class="menu1">
-				<a href="${contextPath}/member/memberMain"><i class="fas fa-plus-square icon"></i></a>
+				<a href="${contextPath}/member/memberMain"><i class="fa-solid fa-square-plus fa-2x"></i></a>
 			</td>
 			<td id="header_menu" class="menu2">
 				<a href="${contextPath}/member/memberMain">시니어 케어텔</a>

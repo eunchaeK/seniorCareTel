@@ -14,6 +14,7 @@ request.setCharacterEncoding("UTF-8");
 <meta charset="UTF-8">
 <link href='/css/fontawesome/all.css' rel='stylesheet' />
 <script src='/css/fontawesome/all.js'></script>
+<script src="https://kit.fontawesome.com/79fd19de4b.js" crossorigin="anonymous"></script>
 <style type="text/css">
 
 .headerTbl {
@@ -59,7 +60,7 @@ request.setCharacterEncoding("UTF-8");
 	<table class="headerTbl">
 		<tr>
 			<td id="header_menu" class="menu1">
-				<a href="${contextPath}/employee/employeeMain"><i class="fas fa-plus-square icon"></i></a>
+				<a href="${contextPath}/employee/employeeMain"><i class="fa-solid fa-square-plus fa-2x"></i></a>
 			</td>
 			<td id="header_menu" class="menu2">
 				<a href="${contextPath}/employee/employeeMain">시니어 케어텔</a>
