@@ -6,7 +6,7 @@
 
 
 
-### 프로젝트 소개
+### 📢 프로젝트 소개
 ------------------
 
 1) **프로젝트 기간 및 참여 인원** <br/>
@@ -27,7 +27,7 @@
 
 <br/>
 
-### 프로젝트 환경 및 도구
+### 🛠 프로젝트 환경 및 도구
 ----
 *   **Languages**: Java 11
 *	**Platform**: WEB
@@ -66,7 +66,7 @@
 
 <br/>
 
-### 관련링크
+### 관련 자료
 ----
 + [프로젝트 기획안](https://drive.google.com/file/d/1ylfU5xRlf6asLvyA7ZoVPvgRu6ZjjCzf/view?usp=sharing)
 + [DB SQL](https://drive.google.com/file/d/1KOMMbiDLTp6DP_VfWB1ytA5C1lkKJzMf/view?usp=sharing)
