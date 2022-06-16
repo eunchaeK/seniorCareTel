@@ -10,7 +10,7 @@
 ### 프로젝트 소개
 -----
 
-1) 프로젝트 기간: 2022.01.21 ~ 2022.02.14
+1) 프로젝트 기간 및 참여 인원: 2022.01.21. ~ 2022.02.14. / 4명
 
 2) 기획의도
 : 코로나로 인한 거리 두기 조치에 따라 요양원 대면 면회가 제한되었고, 면회하기 위해서 입소자의 가족들은 반드시 면회 예약을 해야 하는 상황입니다. 현재 대부분의 요양원은 면회 예약을 위해 전화를 통한 유선 예약 방식만을 택하고 있습니다. 저희 팀은 요양원 면회 예약을 위한 온라인 예약 서비스를 제공함으로써 예약 방식의 선택권을 넓히고, 웹으로 직원과 요양보호사가 면회 예약 내역을 확인할 수 있도록 하여 더욱 효율적으로 면회 예약이 가능하게 하고자 하였습니다.  
@@ -29,18 +29,35 @@
 
 ### 활용 기술
 ----
-* Languages: Java 11
+*   Languages: Java 11
 *	Platform: WEB
 *	Operating System: Window 10
 *	Tool: STS(Spring Tool Suite)
-*	Backend: Spring Boot, Gradle, MyBatis
+*	Backend: Spring Boot 2.6.3, Gradle, MyBatis
 *	Frontend: JSP, HTML, CSS, JavaScript, jQuery, BootStrap
 *	DB: MySQL
-*	담당한 부분: 관리자 페이지 API (+회원 & 요양보호사 관리 페이지 프론트 디자인)
-    -	관리자 로그인/로그아웃 
-    -	회원 & 요양보호사 리스트 조회 
-    -	회원 & 요양보호사 검색 조회 기능 
-    -	회원 & 요양보호사 승인
-    -	회원 & 요양보호사 정보 수정
-    -	회원 & 요양보호사 삭제
+<br/>
+
+### ERD
+----
+![ERD](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/84476b4b-cb76-44a3-aa9e-f311e1c53267/ERD.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220616%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220616T114844Z&X-Amz-Expires=86400&X-Amz-Signature=885233083d9d2b1704878be3bc43109781b585d1d75e832fb772a8b0ab52161c&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22ERD.png%22&x-id=GetObject)
+<br/>
+
+### 구현 기능 
+----
+사용자
+    -   회원가입
+    -   회원 정보 수정
+    -   면회 예약
+    -   면회 예약 조회
+    -   면회 예약 수정
+    -   면회 예약 취소
+    <br/>
+
+관리자 
+    -   회원 리스트 조회
+    -   회원 승인
+    -   회원 정보 수정
+    -   회원 삭제
+    -   면회 내역 조회
 
