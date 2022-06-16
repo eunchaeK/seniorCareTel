@@ -6,7 +6,7 @@ public class GuestMemberDTO {
 	public String id;
 	public String password;
 	public String member_name;
-	public Date birth;
+	public Date member_birth;
 	public String address;
 	public String phone;
 	public String classification;
@@ -31,11 +31,11 @@ public class GuestMemberDTO {
 	public void setMember_name(String member_name) {
 		this.member_name = member_name;
 	}
-	public Date getBirth() {
-		return birth;
+	public Date getMember_birth() {
+		return member_birth;
 	}
-	public void setBirth(Date birth) {
-		this.birth = birth;
+	public void setMember_birth(Date member_birth) {
+		this.member_birth = member_birth;
 	}
 	public String getAddress() {
 		return address;
@@ -71,7 +71,7 @@ public class GuestMemberDTO {
 	@Override
 	public String toString() {
 		return "GuestMemberDTO [id=" + id + ", password=" + password + ", member_name=" + member_name
-				+ ", birth=" + birth + ", address=" + address + ", phone=" + phone + ", classification="
+				+ ", member_birth=" + member_birth + ", address=" + address + ", phone=" + phone + ", classification="
 				+ classification + ", patient_name=" + patient_name + ", patient_birth=" + patient_birth + "]";
 	}
 	

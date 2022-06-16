@@ -5,7 +5,7 @@
 <mapper namespace="com.project.semi.guest.dao.GuestDAO">
 	<insert id="memberJoin">
 		 INSERT INTO register (id, password, member_name, birth, address, phone, classification, patient_name, patient_birth)
-		 VALUES(#{id}, #{password}, #{member_name}, #{birth}, #{address}, #{phone}, "보호자", #{patient_name}, #{patient_birth})  
+		 VALUES(#{id}, #{password}, #{member_name}, #{member_birth}, #{address}, #{phone}, "보호자", #{patient_name}, #{patient_birth})  
 	</insert>
 	<insert id="employeeJoin">
 		 INSERT INTO register (id, password, member_name, birth, address, phone, classification)
