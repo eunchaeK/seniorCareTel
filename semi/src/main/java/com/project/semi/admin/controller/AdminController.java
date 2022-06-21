@@ -2,6 +2,7 @@ package com.project.semi.admin.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.http.HttpResponse;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.project.semi.admin.dto.AdminDTO;
 import com.project.semi.admin.service.AdminService;
@@ -31,6 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 
 
 @Controller("adminController")
+@RequestMapping("/admin")
 public class AdminController {
 
 	@Autowired
@@ -60,23 +63,24 @@ public class AdminController {
 	}
 	
 	// 관리자 메인 페이지 (관리자 로그인 페이지 따로 구현)
-	@GetMapping("admin/adminMain")
-	public String adminMain(HttpSession session, HttpServletResponse resp) {
+	@GetMapping("/adminMain")
+	public String adminMain(HttpSession session, HttpServletResponse resp, RedirectAttributes rattr) {
 		try {
 			if(!adminCheck(session)) {
-				historyBack(resp);
+				rattr.addFlashAttribute("msg", "ADMIN_LEVEL");
+				return "redirect:/home";
 			}
-		}catch(IOException e) {
+		}catch(Exception e) {
 			e.printStackTrace();
-			return "/home";
+			return "redirect:/home";
 		}
-		return "admin/adminMain";	
+		return "/admin/adminMain";	
 	}
 
 	// 회원(가족)/////////////////////////////////////////////////////////////////////////
 
 	/* 회원 리스트 */
-	@GetMapping("/admin/memlist")
+	@GetMapping("/memlist")
 	public String memList(HttpSession session, Criteria cri, Model model) throws Exception {
 		//전체 회원 수(Paging)
 		int memListCnt = adminService.memListCnt();
@@ -96,7 +100,7 @@ public class AdminController {
 	}
 
 	/* 회원 승인 전 정보 가져오기 */
-	@GetMapping("/admin/memberapproval")
+	@GetMapping("/memberapproval")
 	public String memApproval(HttpServletRequest req, Model model) throws Exception {
 		int number = Integer.parseInt(req.getParameter("number"));
 		model.addAttribute("member", adminService.beforeMemApproval(number));
@@ -105,7 +109,7 @@ public class AdminController {
 	}
 
 	/* 회원 승인 후 회원 리스트로 redirect */
-	@PostMapping("/admin/memberapproval")
+	@PostMapping("/memberapproval")
 	public String memApprovalSubmit(@ModelAttribute AdminDTO dto, HttpServletResponse resp) throws Exception {
 		
 		try {
@@ -121,7 +125,7 @@ public class AdminController {
 	}
 
 	/* 회원 정보 수정 전 정보 가져오기 */
-	@GetMapping("/admin/membermod")
+	@GetMapping("/membermod")
 	public String memMod(HttpServletRequest req, Model model) throws Exception{
 		int number = Integer.parseInt(req.getParameter("number"));
 		model.addAttribute("member", adminService.readMemberInfo(number));
@@ -130,7 +134,7 @@ public class AdminController {
 	}
 
 	/* 회원정보 수정(update) 후 회원리스트 화면으로 redirect */
-	@PostMapping("/admin/membermod")
+	@PostMapping("/membermod")
 	public void memModSubmit(@ModelAttribute AdminDTO dto, HttpServletResponse resp) throws Exception{
 		int result = adminService.updateMember(dto);		//수정된 회원 수
 		String pageURL = "/admin/memlist";
@@ -150,7 +154,7 @@ public class AdminController {
 	}
 
 	/* 회원 삭제 */
-	@PostMapping("/admin/memdelete")
+	@PostMapping("/memdelete")
 	public void memberDelete(@RequestParam("delete_numbers") String[] delete_numbers, HttpServletResponse resp) throws Exception{
 	  int result = 0;	// 총 삭제 회원 수 
 	  String pageURL = "/admin/memlist";	
@@ -176,7 +180,7 @@ public class AdminController {
 	}
 
 	/* 회원 검색 필터 */
-	@PostMapping("/admin/getSearchMemList")
+	@PostMapping("/getSearchMemList")
 	@ResponseBody
 	public List<AdminDTO> getSearchMemList(@RequestParam("type") String type, 
 							@RequestParam("keyword") String keyword) throws Exception{
@@ -191,7 +195,7 @@ public class AdminController {
 
 	// 직원(요양사)////////////////////////////////////////////////////////////////////////////////
 	/* 직원 리스트 */
-	@GetMapping("/admin/emplist")
+	@GetMapping("/emplist")
 	public String adminEmpList(Criteria cri, Model model) throws Exception {
 		
 		int empListCnt = adminService.empListCnt();
@@ -208,7 +212,7 @@ public class AdminController {
 		return "admin/emplist";
 	} 
 
-	@GetMapping("/admin/empapproval")
+	@GetMapping("/empapproval")
 	public String empApproval(HttpServletRequest req, Model model) throws Exception {
 		int number = Integer.parseInt(req.getParameter("number"));
 		model.addAttribute("emp", adminService.beforeEmpApproval(number));
@@ -216,7 +220,7 @@ public class AdminController {
 		return "admin/empapproval";
 	}
 
-	@PostMapping("/admin/empapproval")
+	@PostMapping("/empapproval")
 	public String empApprovalSubmit(@ModelAttribute AdminDTO dto) throws Exception {
 		
 		
@@ -229,7 +233,7 @@ public class AdminController {
 		
 	}
 
-	@GetMapping("/admin/empmod")
+	@GetMapping("/empmod")
 	public String adminEmpMod(HttpServletRequest req, Model model) throws Exception {
 		int number = Integer.parseInt(req.getParameter("number"));
 		System.out.println("number:" + number);
@@ -238,7 +242,7 @@ public class AdminController {
 		return "admin/empmod";
 	} 
 
-	@PostMapping("/admin/empmod")
+	@PostMapping("/empmod")
 	public void adminEmpModSubmit(@ModelAttribute AdminDTO dto, HttpServletResponse resp) throws Exception {
 		int result = adminService.updateEmp(dto);		//수정된 회원 수
 		String pageURL = "/admin/emplist";
@@ -258,7 +262,7 @@ public class AdminController {
 	}
 
 	// 요양사 삭제
-	@PostMapping("/admin/empdelete")
+	@PostMapping("/empdelete")
 	public void employeeDelete(@RequestParam("delete_numbers") String[] delete_numbers, HttpServletResponse resp) throws Exception{
 		int result = 0;	// 총 삭제 요양사 수 
 		  String pageURL = "/admin/emplist";	
@@ -284,7 +288,7 @@ public class AdminController {
 	}
 	
 	/* 요양사 검색 필터 */
-	@PostMapping("/admin/getSearchEmpList")
+	@PostMapping("/getSearchEmpList")
 	@ResponseBody
 	public List<AdminDTO> getSearchEmpList(@RequestParam("type") String type, 
 							@RequestParam("keyword") String keyword) throws Exception{
@@ -309,7 +313,7 @@ public class AdminController {
 	
 	
 	// 예약////////////////////////////////////////////////////////////////////////////////////////
-	@GetMapping("/admin/reserve")
+	@GetMapping("/reserve")
 	public String adminReserv(Model model) {
 		return "admin/reserve";
 	}
@@ -319,7 +323,7 @@ public class AdminController {
 	// //////////////////////////////////////////////////////////////////////////////////////
 
 	// 1. 관리자 로그인페이지 매핑
-	@RequestMapping("/admin/adminLogin")
+	@RequestMapping("/adminLogin")
 	public String login() {
 		return "admin/adminLogin";
 	}
@@ -327,7 +331,7 @@ public class AdminController {
 	// 2. 관리자 로그인 체크
 	// https://taes-k.github.io/2019/06/12/spring-security-1/
 
-	@PostMapping("/admin/loginCheck")
+	@PostMapping("/loginCheck")
 	public String loginCheck(HttpSession session, AdminDTO adminDTO) throws Exception {
 
 		AdminDTO dto = null;
@@ -351,7 +355,7 @@ public class AdminController {
 	}
 
 	// 3. 관리자 로그아웃
-	@RequestMapping("/admin/logout")
+	@RequestMapping("/logout")
 	public String logout(HttpServletRequest req) {
 		HttpSession session = req.getSession();
 		session.removeAttribute("classification");
@@ -364,7 +368,7 @@ public class AdminController {
 	}
 
 	// 예약 관리
-	@RequestMapping("/admin/reservList")
+	@RequestMapping("/reservList")
 	public String reservationList(Criteria cri, Model model) throws Exception {
 		// 전체 예약 수(Paging)
 		int reservListCnt = adminService.reservListCnt();
@@ -381,21 +385,21 @@ public class AdminController {
 		return "admin/reservList";
 	}
 	
-	@GetMapping("/admin/adminModReservation")
+	@GetMapping("/adminModReservation")
 	public String reservationUpdate(HttpServletRequest req, Model model) throws Exception {
 		int visit_number = Integer.parseInt(req.getParameter("visit_number"));
 		model.addAttribute("reservation", adminService.readReservationInfo(visit_number));
 		return "admin/adminModReservation";
 	}
 
-	@PostMapping("/admin/adminModReservation")
+	@PostMapping("/modReservation")
 	public String reservationUpdateSubmit(@ModelAttribute AdminDTO adminDTO) throws Exception {
 		int result = adminService.updateReservation(adminDTO);
 		return "redirect:/admin/reservList";
 	}
 
 	// 면회예약 삭제
-	@PostMapping("/admin/reservDelete")
+	@PostMapping("/reservDelete")
 	public void reservationDelete(@RequestParam("delete_numbers") String[] delete_numbers, HttpServletResponse resp) throws Exception{
 		int result = 0;	// 총 삭제 면회예약 수 
 		  String pageURL = "/admin/reservList";	
@@ -420,7 +424,7 @@ public class AdminController {
 			}
 	}
 
-	@GetMapping("/getSearchList")
+	@PostMapping("/getSearchList")
 	@ResponseBody
 	public List<AdminDTO> getSearchList(@RequestParam("type") String type, @RequestParam("keyword") String keyword)
 			throws Exception {

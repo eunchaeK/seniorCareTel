@@ -17,6 +17,10 @@ request.setCharacterEncoding("UTF-8");
 	<link href='/css/fontawesome/all.css' rel='stylesheet' />
 	<link href='/css/common.css' rel='stylesheet' />
 	<script src='/css/fontawesome/all.js'></script>
+	<script type="text/javascript">
+		let msg = "${msg}";
+		if(msg=="ADMIN_LEVEL") alert("관리자만 접근가능합니다.");
+	</script>
 <style type="text/css">
 img {
 	width: 200px;
