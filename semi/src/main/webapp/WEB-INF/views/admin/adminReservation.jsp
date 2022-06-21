@@ -125,8 +125,8 @@ request.setCharacterEncoding("UTF-8");
 			
 			$.ajax({
 				/* post로 나중에 바꾸기 */
-				type: "GET",
-				url: "/getSearchList",
+				type: "POST",
+				url: "/admin/getSearchList",
 				data:{
 					"type" : type,
 					"keyword" : keyword

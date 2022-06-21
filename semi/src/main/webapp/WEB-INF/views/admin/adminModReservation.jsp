@@ -25,7 +25,7 @@
 </style>
 </head>
 <body>
-	<form method="post">
+	<form method="post" action="${contextPath}/admin/modReservation">
 	<h1 class="text_center">예약 정보 수정창</h1>
 	<table  align="center">
 		<tr class="tblRow">
